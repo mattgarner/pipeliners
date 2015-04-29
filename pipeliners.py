@@ -2,7 +2,7 @@
 
 import subprocess
 
-verbose_level = 0
+__verbose_level = 0
 
 VERBOSE_LEVELS = {'DEBUG' : 0,
                   'INFO'  : 1,
@@ -19,10 +19,13 @@ REV_VERBOSE_LEVELS = { 0 : 'DEBUG',
 
 def set_verbose_level( new_level ):
 
+    global __verbose_level
+
     new_level = new_level.upper()
 
     if ( new_level in VERBOSE_LEVELS ):
-        verbose_level = new_level
+        __verbose_level = VERBOSE_LEVELS[ new_level ]
+        print "New verbose level: " + REV_VERBOSE_LEVELS[ __verbose_level ]
     else:
         print "Unknown verbosity level: " + new_level
 
@@ -31,10 +34,10 @@ def set_verbose_level( new_level ):
 
 def verbose_print( message, level ):
 
-    if (VERBOSE_LEVELS[ level ] > verbose_level):
+    if (__verbose_level > VERBOSE_LEVELS[ level ] ):
         return
 
-    print REV_VERBOSE_LEVELS[ verbose_level ] + " :: " + message
+    print REV_VERBOSE_LEVELS[ __verbose_level ] + " :: " + message
 
 
     

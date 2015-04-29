@@ -17,6 +17,8 @@ if (len(sys.argv) == 1):
 
 program = sys.argv[1]
 
+pipeliners.set_verbose_level('INFO');
+
 for arg in range(2, len(sys.argv)):
     infile = str(sys.argv[ arg ])
     cmd = str(program) + " " + infile

@@ -17,6 +17,8 @@ REV_VERBOSE_LEVELS = { 0 : 'DEBUG',
 
 
 
+__steps = list();
+
 def set_verbose_level( new_level ):
 
     global __verbose_level
@@ -40,7 +42,17 @@ def verbose_print( message, level ):
     print REV_VERBOSE_LEVELS[ __verbose_level ] + " :: " + message
 
 
-    
+def add_step(name, cmd):
+    global __steps
+    __steps.append([ name, cmd ]);
+
+
+def run_steps():
+
+    for step in steps:
+        (name, cmd) = step
+        system_call( name, cmd)
+
 
 #------------------------------------------------------------
 # Make system call fucntion that checks if the function exited correctly
@@ -56,3 +68,4 @@ def system_call( step_name, cmd ):
 
         verbose_print("Script failed at %s stage - exit code was %s, ouput = %s" % (step_name, scall.returncode, scall.output), 'DEBUG')
         verbose_print("Script failed at %s stage - exit code was %s" % (step_name, scall.returncode), 'INFO')
+        exit()

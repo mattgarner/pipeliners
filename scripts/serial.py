@@ -8,7 +8,7 @@
 import sys
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
-
+sys.path.append("/Users/Nick/github/pipeliners/modules")
 import pipeliners
 
 if (len(sys.argv) == 1):

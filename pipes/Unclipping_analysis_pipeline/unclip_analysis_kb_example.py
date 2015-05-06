@@ -47,7 +47,16 @@ def deduplicate_bamfile(infile, outfile, outcsv):
 
 	# Mark/remove duplicate reads
 	return = "/software/bin/picard -t MarkDuplicates I= " + infile + " O= " + outfile + " AS=true M=" + outcsv 
-	
+
+def index_bamfile(infile):	
+	# Index the bam file so it can be viewed in IGV later on
+	index = "/software/bin/samtools index " + infile
+
+def unclip_bamfile(infile):
+	# Run unclip bamfile
+	unclip_bamfile = "/software/bin/scripts/bam_unclip_bases.pl " + infile + ".bam"
+
+
 #------------------------------------------------------------
 # Define fastq's and get sample names. 
 
@@ -55,7 +64,7 @@ def deduplicate_bamfile(infile, outfile, outcsv):
 if (len(sys.argv) == 1):
     print "Needs an sample name as input"
     exit();
-
+ 
 
 sample_name = sys.argv[1]    
 sample_name = re.sub(r"(.*).1.fq.gz", r"\1", sample_name)
@@ -82,72 +91,10 @@ exit()
 
 
 
-# Mark/remove duplicate reads
-deduplicate_bamfile = "/software/bin/picard -T MarkDuplicates I= " + analysis_dir + sample_name + "_sorted.bam O= " + analysis_dir + sample_name + "_rmdups.bam AS=true M=" + analysis_dir + sample_name + "_rmdup.csv"
-
-# Index the bam file so it can be viewed in IGV later on
-index = "/software/bin/samtools index " + analysis_dir + sample_name + "_rmdups.bam"
-
-# HIV alignment fix
-alignment_fixing_HIV = "/software/packages/HIV-pipeline/scripts/bam_fix_indels.pl " + analysis_dir + sample_name + "_rmdups.bam " + analysis_dir + sample_name + "_fixed.bam"
-
-# Index the new bam file so it can be viewed in IGV later on
-index_fix = "/software/bin/samtools index " + analysis_dir + sample_name + "_fixed.bam"
-
-# Run unclip bamfile
-unclip_bamfile = "/software/bin/scripts/bam_unclip_bases.pl " + analysis_dir + sample_name + ".bam"
-
-#------------------------------------------------------------
-#------------------------------------------------------------
-# Sort the unclipped bamfile with samtools
-sort_bam_2 = "/software/bin/samtools sort " + analysis_dir + sample_name_unclipped + ".bam " + analysis_dir + sample_name_unclipped + "_sorted"
-
-# Mark/remove duplicate reads
-deduplicate_bamfile_2 = "/software/bin/picard -T MarkDuplicates I= " + analysis_dir + sample_name_unclipped + "_sorted.bam O= " + analysis_dir + sample_name_unclipped + "_rmdups.bam AS=true M=" + analysis_dir + sample_name_unclipped + "_rmdup.csv"
-
-# Index the bam file so it can be viewed in IGV later on
-index_2 = "/software/bin/samtools index " + analysis_dir + sample_name_unclipped + "_rmdups.bam"
-
-# HIV alignment fix
-alignment_fixing_HIV_2 = "/software/packages/HIV-pipeline/scripts/bam_fix_indels.pl " + analysis_dir + sample_name_unclipped + "_rmdups.bam " + analysis_dir + sample_name_unclipped + "_fixed.bam"
-
-# Index the new bam file so it can be viewed in IGV later on
-index_fix_2 = "/software/bin/samtools index " + analysis_dir + sample_name_unclipped + "_fixed.bam"
-
-# Run unclip bamfile
-unclip_bamfile_2 = "/software/bin/scripts/bam_unclip_bases.pl " + analysis_dir + sample_name_unclipped + ".bam"
 
 
 
-#------------------------------------------------------------
-# Make directory
-#system_call("DIRECTORY", make_analysis_directory)
 
-# Process raw fastq files
-#system_call("DE-ADAPT2", remove_adapters_2)
-#system_call("DE-ADAPT1", remove_adapters_1)
 
-# Align to reference
-#system_call("SMALT ALIGNMENT", smalt)
-system_call("samfile > bamfile", sam_to_bam)
-# Regular pipeline
-system_call("sort_bam_1", sort_bam_1)   
-system_call("deduplicate_bamfile", deduplicate_bamfile)
-system_call("index", index)
-system_call("HIV_fix", alignment_fixing_HIV)
-system_call("Index fixed", index_fix)
 
-# Unclip bamfile and proceed with rest of analysis 
-system_call("unclip", unclip_bamfile)
-# Rest of pipeline
-system_call("sort_bam_2", sort_bam_2)   
-system_call("deduplicate_bamfile2", deduplicate_bamfile_2)
-system_call("index2", index_2)
-system_call("HIV_fix2", alignment_fixing_HIV_2)
-system_call("Index fixed2", index_fix_2)
-#------------------------------------------------------------
-#------------------------------------------------------------
-#------------------------------------------------------------
-#------------------------------------------------------------
-#------------------------------------------------------------
-#------------------------------------------------------------
+

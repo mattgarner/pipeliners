@@ -21,14 +21,33 @@ import pipeliners
 bin = "/software/bin/"
 
 def cutadapt( infile, outfile):
-    return( "/software/packages/cutadapt-1.1/bin/cutadapt -b TGTAGAACCATGTCGTCAGTGT -b AGACCAAGTCTCTGCTACCGT "  +infile  +" | gzip -c  > analysis/" + outfile)
+    return( "/software/packages/cutadapt-1.1/bin/cutadapt -b TGTAGAACCATGTCGTCAGTGT -b AGACCAAGTCTCTGCTACCGT "  + infile  +" | gzip -c  > analysis/" + outfile)
 
 def smalt( infile1, infile2, outfile):
 
     # Align the reads to the reference (run smalt-0.7.6 to see all options)
     return "/software/bin/smalt_0.7.6 map -f samsoft /refs/HIV/K03455_s1k6 " + infile1 + " " + infile2 + "| samtools view -Sb -  > " + outfile
 
+def remove_adapters(infile1,infile2,outfile1,outfile2):
 
+	# remove the sequencing adaptors
+	return = "/software/packages/cutadapt-1.1/bin/cutadapt -b TGTAGAACCATGTCGTCAGTGT -b AGACCAAGTCTCTGCTACCGT " + infile1 + " > " + outfile1
+	return = "/software/packages/cutadapt-1.1/bin/cutadapt -b TGTAGAACCATGTCGTCAGTGT -b AGACCAAGTCTCTGCTACCGT " + infile2 + " > " + outfile2
+
+def sam_to_bam(infile, outfile):
+
+	return =  "/software/bin/samtools view -Sb " + infile + " " + outfile  
+
+def sort_bamfile(infile, outfile):
+
+	# sort bamfile
+	return = "/software/bin/samtools sort " + infile + ".bam " + outfile + "_sorted"
+
+def deduplicate_bamfile(infile, outfile, outcsv): 
+
+	# Mark/remove duplicate reads
+	return = "/software/bin/picard -t MarkDuplicates I= " + infile + " O= " + outfile + " AS=true M=" + outcsv 
+	
 #------------------------------------------------------------
 # Define fastq's and get sample names. 
 
@@ -60,12 +79,8 @@ exit()
 
 
 
-# remove the sequencing adaptors
-remove_adapters_1 = "/software/packages/cutadapt-1.1/bin/cutadapt -b TGTAGAACCATGTCGTCAGTGT -b AGACCAAGTCTCTGCTACCGT " + fastq_dir + sample_name +".1.fq.gz > " + analysis_dir + sample_name + "_ra.1.fq; cd " + analysis_dir + "; gzip " + sample_name + "_ra.1.fq; cd .."
-remove_adapters_2 = "/software/packages/cutadapt-1.1/bin/cutadapt -b TGTAGAACCATGTCGTCAGTGT -b AGACCAAGTCTCTGCTACCGT " + fastq_dir + sample_name +".2.fq.gz > " + analysis_dir + sample_name + "_ra.2.fq; cd " + analysis_dir + "; gzip " + sample_name + "_ra.2.fq; cd .."
 
-# Sort the bamfile with samtools
-sort_bam_1 = "/software/bin/samtools sort " + analysis_dir + sample_name + ".bam " + analysis_dir + sample_name + "_sorted"
+
 
 # Mark/remove duplicate reads
 deduplicate_bamfile = "/software/bin/picard -T MarkDuplicates I= " + analysis_dir + sample_name + "_sorted.bam O= " + analysis_dir + sample_name + "_rmdups.bam AS=true M=" + analysis_dir + sample_name + "_rmdup.csv"

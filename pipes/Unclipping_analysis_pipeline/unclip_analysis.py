@@ -85,6 +85,8 @@ for sample in os.listdir(indir):
 # Preparation of bamfile + unclipped bamfile  
 pipeliners.system_call('Cut Adapters', cutadapt(sample_name + ".1.fq.gz", analysis_directory + sample_name + "_ar.1.fq.gz"))
 pipeliners.system_call('Cut Adapters', cutadapt(sample_name + ".2.fq.gz", analysis_directory + sample_name + "_ar.2.fq.gz"))
+exit()
+
 pipeliners.system_call('SMALT alignment', smalt(analysis_directory, sample_name + "_ar.1.fq.gz", sample_name + "_ar.2.fq.gz", sample_name + ".sam"))
 pipeliners.system_call('Convert samfile to bamfile', sam_to_bam(analysis_directory, sample_name + ".sam", sample_name + ".bam"))
 

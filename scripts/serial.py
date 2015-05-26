@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#
 # 
 # script that runs a function with a set of infiles in serial
 # 
@@ -6,9 +6,9 @@
 # Kim Brugger (29 Apr 2015), contact: kim@brugger.dk
 
 import sys
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
-sys.path.append("/Users/Nick/github/pipeliners/modules")
+#import pprint
+#pp = pprint.PrettyPrinter(indent=4)
+sys.path.append("/data/VMshare/github/pipeliners/modules")
 import pipeliners
 
 if (len(sys.argv) == 1):

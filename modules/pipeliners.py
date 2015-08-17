@@ -49,7 +49,7 @@ def add_step(name, cmd):
 
 def run_steps():
 
-    for step in steps:
+    for step in __steps:
         (name, cmd) = step
         system_call( name, cmd)
 
